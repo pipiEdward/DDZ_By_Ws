@@ -625,10 +625,10 @@
     },
     "_enabled": true,
     "roomNumLabel": {
-      "__id__": 11
+      "__id__": 10
     },
     "playerListLabel": {
-      "__id__": 15
+      "__id__": 14
     }
   }
 ]

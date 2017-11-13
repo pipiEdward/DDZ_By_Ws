@@ -8,6 +8,7 @@ cc.Class({
 
     // use this for initialization
     onLoad() {
+        this._super();
         let roomPre = this.roomPrefab;
         let layout = this.layout;
 
@@ -34,26 +35,25 @@ cc.Class({
     },
 
     roomCallback(msg) {
-        console.log(msg);
-        let roomList = eval('(' + msg + ')');
+        console.log('a'+msg);
+        let roomList = msg;
 
         for (let i = 0; i < roomList.length; i++) {
             let room = roomList[i];
             let roomNum = room.roomNum;
             let playerNameListStr = '';
-
             let playerList = room.playerList;
             for (let j = 0; j < playerList.length; j++) {
                 playerNameListStr += playerList[j].name + ',';
             }
 
-            let roomPrefabScipt = cc.instantiate(roomPrefab).$('RoomPrefab');
+            let roomPrefabScipt = cc.instantiate(this.roomPrefab).$('RoomPrefab');
             let labelStr = '房间: ' + roomNum + '(' + playerNameListStr + ')';
-            roomPrefabScript.label.string = labelStr;
+            roomPrefabScipt.label.string = labelStr;
             roomPrefabScipt.roomNum = roomNum;
             roomPrefabScipt.enableButton(playerList.length < 3);
 
-            layout.addChild(roomPrefabScipt.node);
+            this.layout.addChild(roomPrefabScipt.node);
         }
     }
 

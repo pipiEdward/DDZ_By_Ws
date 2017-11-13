@@ -16,14 +16,14 @@ PokerPlayHelp.prototype.getPokerWraper = function(pokerList){
 	if(!pokerList || pokerList.length == 0)
 		throw ExceptionType.WRONG_POKER_TYPE;
 
-	var pokerWraper = new PokerWraper(pokerList);
+	let pokerWraper = new PokerWraper(pokerList);
 
-	var pokerMap = new PokerMap();
-	for(var i = 0; i < pokerList.length; i++){
-		var poker = pokerList[i];
+	let pokerMap = new PokerMap();
+	for(let i = 0; i < pokerList.length; i++){
+		let poker = pokerList[i];
 		console.log(JSON.stringify(poker))
 
-		var count = pokerMap[poker.value];
+		let count = pokerMap[poker.value];
 		if(!count){
 			count = 0;
 		}
@@ -33,8 +33,8 @@ PokerPlayHelp.prototype.getPokerWraper = function(pokerList){
 
 	console.log('pokerMap: ' + JSON.stringify(pokerMap));
 
-	var countList = new Array();// 每张相同牌值的数量数组
-	for(var pokerValue in pokerMap){
+	let countList = [];// 每张相同牌值的数量数组
+	for(let pokerValue in pokerMap){
 		if(pokerValue != 'size')
 			countList.push(pokerMap[pokerValue]);
 	}
@@ -47,9 +47,9 @@ PokerPlayHelp.prototype.getPokerWraper = function(pokerList){
 	console.log('countList: ' + JSON.stringify(countList));
 
 	//得到牌型
-	var type = '';
-	for(var i = 0; i < countList.length; i++){
-		var count = countList[i];
+	let type = '';
+	for(let i = 0; i < countList.length; i++){
+		let count = countList[i];
 		if(count > 4)
 			throw ExceptionType.WRONG_POKER_TYPE;
 
@@ -64,26 +64,26 @@ PokerPlayHelp.prototype.getPokerWraper = function(pokerList){
 	type = type.replace(/4/g, 'd');
 
 	// 处理顺子，可能大于5个，使等于5个
-	var pattern = /a+/g;
-	var array = pattern.exec(type);
+	let pattern = /a+/g;
+	let array = pattern.exec(type);
 	if(array && array[0].length == type.length && type.length > 5)
 		type = 'aaaaa';
 
 	// 处理连对，大于3对时使其等于3对
-	var pattern2 = /b+/g;
-	var array2 = pattern2.exec(type);
+	let pattern2 = /b+/g;
+	let array2 = pattern2.exec(type);
 	if(array2 && array2[0].length == type.length && type.length > 3)
 		type = 'bbb';
 
 	try{
 		console.log('type:' + type);
-		var executorKey = Type[type];
+		let executorKey = Type[type];
 		console.log('executorKey:' + executorKey);
 
-		var executor = new Executor();
+		let executor = new Executor();
 
-		// var e = executor['one'];
-		// for(var key in executor){
+		// let e = executor['one'];
+		// for(let key in executor){
 		// 	console.log(key);
 		// }
 
@@ -111,8 +111,8 @@ function PokerWraper(pokerList){
 *	targetPokerList 能否管上当前的PokerWraper的牌
  */
 PokerWraper.prototype.follow = function(targetPokerList){
-	var canFollow = false;
-	var targetPokerWraper = new PokerPlayHelp().getPokerWraper(targetPokerList);
+	let canFollow = false;
+	let targetPokerWraper = new PokerPlayHelp().getPokerWraper(targetPokerList);
 
 	console.log('this:' + JSON.stringify(this));
 	console.log('target:' + JSON.stringify(targetPokerWraper));
@@ -144,8 +144,8 @@ function PokerMap(){
 }
 
 PokerMap.prototype.size = function(){
-	var size = 0;
-	for(var key in this){
+	let size = 0;
+	for(let key in this){
 		// console.log(key);
 		if('size' != key)
 			size ++;
@@ -154,7 +154,7 @@ PokerMap.prototype.size = function(){
 }
 
 
-var PokerType = {
+let PokerType = {
 	one: 'one', 
 	pair: 'pair', 
 	three: 'three',
@@ -165,7 +165,7 @@ var PokerType = {
 	bomb: 'bomb'
 }
 
-var ExceptionType = {
+let ExceptionType = {
 	WRONG_POKER_TYPE: '错误的牌型',
 	NOT_SAME_POKER_TYPE: '跟上一家牌型不一致'
 }
@@ -176,8 +176,8 @@ function Executor(){}
 Executor.prototype.bomb = function(map, pokerWraper){
 	// console.log('aaa' + p);
 	if(map.size() == 2){
-		var index = 0;
-		for(var pokerValue in map){
+		let index = 0;
+		for(let pokerValue in map){
 			if(pokerValue == 'size')
 			continue;
 		
@@ -196,8 +196,8 @@ Executor.prototype.bomb = function(map, pokerWraper){
 	}
 
 	//普通炸弹 四个一样的牌
-	var value = 0;
-	for(var pokerValue in map){
+	let value = 0;
+	for(let pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
 		
@@ -212,11 +212,11 @@ Executor.prototype.bomb = function(map, pokerWraper){
 
 /** 四带X  */
 Executor.prototype.four = function(map, pokerWraper){
-	for(var pokerValue in map){
+	for(let pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
 		
-		var count = map[pokerValue];
+		let count = map[pokerValue];
 		if(count == 4){
 			pokerWraper.leadValue = pokerValue;
 			pokerWraper.pokerType = PokerType.four;
@@ -230,8 +230,8 @@ Executor.prototype.four = function(map, pokerWraper){
 }
 /**  连对  */
 Executor.prototype.multiPair = function(map, pokerWraper){
-	var valueList = new Array();
-	for(var pokerValue in map){
+	let valueList = [];
+	for(let pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
 		
@@ -247,16 +247,16 @@ Executor.prototype.multiPair = function(map, pokerWraper){
 		throw ExceptionType.WRONG_POKER_TYPE;
 
 	// 检查是否是顺子
-	var valueSum = 0;
-	for(var i = 0; i < valueList.length; i++){
+	let valueSum = 0;
+	for(let i = 0; i < valueList.length; i++){
 		valueSum += Number(valueList[i]);
 	}
 	// 等差数列求和 (a1+an)*n/2
-	var n = valueList.length;
-	var a1 = valueList[0];
-	var an = valueList[n-1];
+	let n = valueList.length;
+	let a1 = valueList[0];
+	let an = valueList[n-1];
 
-	var targetSum = (Number(a1) + Number(an))*n/2;
+	let targetSum = (Number(a1) + Number(an))*n/2;
 
 	if(valueSum == targetSum && (an -a1)/(n-1) == 1){
 		pokerWraper.leadValue = a1;
@@ -270,9 +270,9 @@ Executor.prototype.multiPair = function(map, pokerWraper){
 /**  单张 */
 Executor.prototype.one = function(map, pokerWraper){
 	
-	var size = 0;
-	var count = 0;
-	var value = 0;
+	let size = 0;
+	let count = 0;
+	let value = 0;
 	for(pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
@@ -292,9 +292,9 @@ Executor.prototype.one = function(map, pokerWraper){
 }
 /**  一对 */
 Executor.prototype.pair = function(map, pokerWraper){
-	var size = 0;
-	var count = 0;
-	var value = 0;
+	let size = 0;
+	let count = 0;
+	let value = 0;
 	for(pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
@@ -314,8 +314,8 @@ Executor.prototype.pair = function(map, pokerWraper){
 }
 /**  飞机 */
 Executor.prototype.plane = function(map, pokerWraper){
-	var valueList = new Array();
-	for(var pokerValue in map){
+	let valueList = [];
+	for(let pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
 		
@@ -332,16 +332,16 @@ Executor.prototype.plane = function(map, pokerWraper){
 		throw ExceptionType.WRONG_POKER_TYPE;
 
 	//检查是否是连续的
-	var valueSum = 0;
-	for(var i = 0; i < valueList.length; i++){
+	let valueSum = 0;
+	for(let i = 0; i < valueList.length; i++){
 		valueSum += Number(valueList[i]);
 	}
 	// 等差数列求和 (a1+an)*n/2
-	var n = valueList.length;
-	var a1 = valueList[0];
-	var an = valueList[n-1];
+	let n = valueList.length;
+	let a1 = valueList[0];
+	let an = valueList[n-1];
 
-	var targetSum = (Number(a1) + Number(an))*n/2;
+	let targetSum = (Number(a1) + Number(an))*n/2;
 
 	if(valueSum == targetSum && (an -a1)/(n-1) == 1){
 		pokerWraper.leadValue = a1;
@@ -353,8 +353,8 @@ Executor.prototype.plane = function(map, pokerWraper){
 }
 /**  顺子 */
 Executor.prototype.row = function(map, pokerWraper){
-	var valueList = new Array();
-	for(var pokerValue in map){
+	let valueList = [];
+	for(let pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
 		
@@ -372,16 +372,16 @@ Executor.prototype.row = function(map, pokerWraper){
 		throw ExceptionType.WRONG_POKER_TYPE;
 
 	//检查是否是顺子
-	var valueSum = 0;
-	for(var i = 0; i < valueList.length; i++){
+	let valueSum = 0;
+	for(let i = 0; i < valueList.length; i++){
 		valueSum += Number(valueList[i]);
 	}
 	// 等差数列求和 (a1+an)*n/2
-	var n = valueList.length;
-	var a1 = valueList[0];
-	var an = valueList[n-1];
+	let n = valueList.length;
+	let a1 = valueList[0];
+	let an = valueList[n-1];
 
-	var targetSum = (Number(a1) + Number(an))*n/2;
+	let targetSum = (Number(a1) + Number(an))*n/2;
 
 	// console.log(valueSum + ',' + targetSum);
 
@@ -395,11 +395,11 @@ Executor.prototype.row = function(map, pokerWraper){
 }
 /**  三带X */
 Executor.prototype.three = function(map, pokerWraper){
-	for(var pokerValue in map){
+	for(let pokerValue in map){
 		if(pokerValue == 'size')
 			continue;
 		
-		var count = map[pokerValue];
+		let count = map[pokerValue];
 		if(count == 3){
 			pokerWraper.leadValue = pokerValue;
 			pokerWraper.pokerType = PokerType.three;
@@ -434,7 +434,7 @@ Executor.prototype.three = function(map, pokerWraper){
  * 3=c
  * 4=d
  */
- var Type = {
+ let Type = {
  	a : 'one',
 	b : 'pair',
 	c : 'three',

@@ -361,13 +361,13 @@
       "width": 960,
       "height": 500
     },
-    "_resize": 0,
-    "_N$layoutType": 2,
+    "_resize": 2,
+    "_N$layoutType": 3,
     "_N$padding": 0,
     "_N$cellSize": {
       "__type__": "cc.Size",
-      "width": 40,
-      "height": 40
+      "width": 400,
+      "height": 80
     },
     "_N$startAxis": 0,
     "_N$paddingLeft": 0,

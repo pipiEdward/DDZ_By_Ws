@@ -35,6 +35,7 @@ cc.Class({
 
     // use this for initialization
     onLoad() {
+        this._super();
         this.backPrefab = new cc.NodePool();
 
         this.node.on('touchstart', this.nodeDoubleClickCallBack, this);
@@ -193,7 +194,7 @@ cc.Class({
     },
 
     onDealingCards(msg) {
-        let msgBean = eval('(' + msg + ')');
+        let msgBean = msg;
         let pokerList = msgBean.pokerList;
         Global.allPokers = pokerList;
 
@@ -213,7 +214,7 @@ cc.Class({
 
     //抢地主结束回调
     onQiangEnd(msg) {
-        let msgBean = eval('(' + msg + ')');
+        let msgBean = msg;
         //显示地主牌
         this.displayPokers(msgBean.dizhuPokers, this.dizhuNode, this.poker, this.pokerSpriteFrameMap);
 
@@ -276,7 +277,7 @@ cc.Class({
 
     //监听出牌
     onPlayCard(msg) {
-        let msgBean = eval('(' + msg + ')');
+        let msgBean = msg;
         let command = msgBean.command;
         let playType = msgBean.playType;
         let pokerList = msgBean.pokerList;
@@ -293,7 +294,7 @@ cc.Class({
 
     //监听玩家状态
     onRoomPlayer() {
-        let msgBean = eval('(' + msg + ')');
+        let msgBean = msg;
         let myIndex = Global.roomIndex;
         let leftIndex = (myIndex + 2) % 3;
         let rightIndex = (myIndex + 1) % 3;

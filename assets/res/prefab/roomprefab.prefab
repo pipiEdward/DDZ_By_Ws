@@ -423,7 +423,8 @@
     },
     "button": {
       "__id__": 10
-    }
+    },
+    "roomNum": 0
   },
   {
     "__type__": "cc.PrefabInfo",

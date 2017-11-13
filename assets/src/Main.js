@@ -3,7 +3,6 @@ cc.Class({
 
     properties: {
         editbox: cc.EditBox,
-
     },
 
     // use this for initialization
@@ -30,7 +29,7 @@ cc.Class({
 
     //加入房间
     joinCallback(event) {
-        let playerName = this.playerNameBox.string;
+        let playerName = this.editbox.string;
         // alert(playerName);
         if (playerName == '') {
             alert('请输入昵称');

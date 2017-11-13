@@ -8,6 +8,7 @@ cc.Class({
 
     // use this for initialization
     onLoad() {
+        this._super();
         if (Global.roomWaitType == 'create') {
             Network.send({ f: 'createRoom', msg: Global.playerName });
         }
@@ -46,14 +47,14 @@ cc.Class({
 
     //创建房间成功
     onCreateRoom(msg) {
-        let room = eval('(' + msg + ')');
+        let room = msg;
         this.doCreat(room);
         Global.roomNum = room.roomNum;
         Global.roomIndex = 0;//创建者的位置序号为0（第一个）
     },
 
     onRoomNumJoin(msg) {
-        let room = eval('(' + msg + ')');
+        let room = msg;
         this.doCreat(room);
     },
 
