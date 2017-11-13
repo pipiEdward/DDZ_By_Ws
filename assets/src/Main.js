@@ -11,9 +11,8 @@ cc.Class({
         this._super();
         //连接服务器
         Network.initNetwork();
-
     },
-    
+
 
     //创建房间
     createCallback(event) {
@@ -43,9 +42,14 @@ cc.Class({
         }
     },
 
-    // getNetData(event) {
-    //     let data = event.detail;
-    // },
+    getNetData(event) {
+        let data = event.detail;
+    },
+
+    netStart (event) {
+        this._super();
+        //登录
+    },
 
 
     // called every frame, uncomment this function to activate update callback

@@ -4,12 +4,12 @@ let NetworkComponent = cc.Class({
 
     properties: {
     },
-    onLoad: function () {
+    onLoad () {
         NetTarget.on('net', this.getNetData.bind(this));
         NetTarget.on('netstart', this.netStart.bind(this));
         NetTarget.on('netclose', this.netClose.bind(this));
     },
-    onDestroy: function () {
+    onDestroy () {
         cc.log('destroy');
         NetTarget.off('net', this.getNetData.bind(this));
         NetTarget.off('netstart', this.netStart.bind(this));
@@ -18,7 +18,7 @@ let NetworkComponent = cc.Class({
     /**
      * 获取服务端数据
      */
-    getNetData: function (event) {
+    getNetData (event) {
         let data = event.detail;
         let str = "接受数据：" + JSON.stringify(data);
         cc.log(str);
@@ -26,13 +26,13 @@ let NetworkComponent = cc.Class({
     /**
      * 网络连接开始
      */
-    netStart: function (event) {
+    netStart (event) {
         cc.log("net start");
     },
     /**
      * 网络断开
      */
-    netClose: function (event) {
+    netClose (event) {
         cc.log("net close");
     },
 });
