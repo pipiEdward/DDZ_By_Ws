@@ -1,5 +1,3 @@
-import { fail } from 'assert';
-
 cc.Class({
     extends: require('NetComponent'),
 
@@ -36,7 +34,7 @@ cc.Class({
     // use this for initialization
     onLoad() {
         this._super();
-        this.backPrefab = new cc.NodePool();
+        this.backPrefabPool = new cc.NodePool();
 
         this.node.on('touchstart', this.nodeDoubleClickCallBack, this);
 
@@ -44,9 +42,10 @@ cc.Class({
     },
 
     onDestroy() {
-        this.node.off('touchstart',this.nodeDoubleClickCallBack,this);
+        this.node.off('touchstart', this.nodeDoubleClickCallBack, this);
 
         //释放资源
+        cc.loader.releaseAll();
     },
 
     //加载卡片资源
@@ -58,7 +57,7 @@ cc.Class({
             let sflist = assets.getSpriteFrames();
             for (let i = 0; i < sflist.length; i++) {
                 let sf = sflist[i];
-                this.pokerSpriteFrameMap[sf._name] = sf;
+                self.pokerSpriteFrameMap[sf._name] = sf;
             }
 
             self.init();
@@ -66,12 +65,13 @@ cc.Class({
     },
 
     init() {
-        let pokerPrefab = this.poker;
-        let myNode = this.myNode;
-        let displayNode = this.displayNode;
+        cc.log('init');
         let playButton = this.playButton;
         let passButton = this.passButton;
         let readyButton = this.readyButton;
+        playButton.node.active = false;
+        passButton.node.active = false;
+        readyButton.node.active = true;
     },
 
     //接受数据
@@ -124,7 +124,7 @@ cc.Class({
                 isPass: false,
             };
             Global.isPass = msg.isPass;
-            Network.send({ f: 'play', msg: JSON.stringify(msg) });
+            Network.send({ f: 'play', msg: msg });
         }
     },
 
@@ -138,7 +138,7 @@ cc.Class({
 
         Global.isPass = msg.isPass;
         this.readyButton.node.active = false;
-        Network.send({ f: 'play', msg: JSON.stringify(msg) });
+        Network.send({ f: 'play', msg: msg });
     },
 
     //准备
@@ -158,7 +158,7 @@ cc.Class({
             roomNum: Global.roomNum,
             qiangdizhu: false
         };
-        Network.send({ f: 'qiangdizhu', msg: JSON.stringify(msg) });
+        Network.send({ f: 'qiangdizhu', msg: msgBean });
         this.buqiangButton.node.active = false;
         this.qiangButton.node.active = false;
     },
@@ -166,10 +166,11 @@ cc.Class({
     //抢地主
     qiangCallBack(event) {
         let msgBean = {
+            playerName: Global.playerName,
             roomNum: Global.roomNum,
             qiangdizhu: true
         };
-        Network.send({ f: 'qiangdizhu', msg: JSON.stringify(msg) });
+        Network.send({ f: 'qiangdizhu', msg: msgBean });
         this.buqiangButton.node.active = false;
         this.qiangButton.node.active = false;
     },
@@ -208,7 +209,7 @@ cc.Class({
             this.qiangButton.node.active = true;
         }
 
-        let myNodeScript = myNode.$('MyNodeScript');
+        let myNodeScript = this.myNode.$('MyNodeScript');
         myNodeScript.displayPokers(pokerList, this.pokerSpriteFrameMap);
     },
 
@@ -231,8 +232,8 @@ cc.Class({
                 Global.allPokers.sort(function (a, b) {
                     return b.sortValue - a.sortValue;
                 });
-                let myNodeScript = myNode.$('MyNodeScript');
-                myNodeScript.displayPokers(Global.allPokers, pokerSpriteFrameMap);
+                let myNodeScript = this.myNode.$('MyNodeScript');
+                myNodeScript.displayPokers(Global.allPokers, this.pokerSpriteFrameMap);
             }
         }
     },
@@ -260,7 +261,7 @@ cc.Class({
 
         Global.selectPokers = [];
 
-        let myNodeScript = myNode.$('MyNodeScript');
+        let myNodeScript = this.myNode.$('MyNodeScript');
         myNodeScript.displayPokers(Global.allPokers, this.pokerSpriteFrameMap);
     },
 
@@ -293,7 +294,7 @@ cc.Class({
     },
 
     //监听玩家状态
-    onRoomPlayer() {
+    onRoomPlayer(msg) {
         let msgBean = msg;
         let myIndex = Global.roomIndex;
         let leftIndex = (myIndex + 2) % 3;
@@ -303,7 +304,7 @@ cc.Class({
         let rightNum = msgBean[rightIndex];
 
         this.updateLeftAndRightPokerNum(leftNum, rightNum);
-        this.updateOutPokers(msgBean.currPlay, this.pokerPrefab, this.pokerSpriteFrameMap);
+        this.updateOutPokers(msgBean.currPlay, this.poker, this.pokerSpriteFrameMap);
     },
 
     // 显示牌

@@ -15,7 +15,7 @@ cc.Class({
     joinCallback(event) {
         Global.roomNum = this.roomNum;
         Global.roomWaitType = 'join';
-        cc.director.loadScene('RoomWait');
+        cc.director.loadScene('roomwait');
     },
 
     enableButton(flag) {

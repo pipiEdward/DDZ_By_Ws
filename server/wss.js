@@ -89,11 +89,6 @@ exports.start = () => {
 	wss = new webSocketServer({ port: 3000 });
 	wss.on('connection', (ws) => {
 		console.log('client connected');
-		// let temp = ws.send;
-		// ws.send = function(msg){
-		// 	console.log('send:'+msg);
-		// 	temp(msg);
-		// };
 		hook(ws,
 			onOpen.bind(ws),
 			onMessage.bind(ws),
@@ -217,6 +212,7 @@ function onJoinRoom(msg) {
 };
 
 function onReady(msg) {
+	console.log('onReady');
 	let arr = msg.split(',');
 	let playerName = arr[0];
 	let roomNum = arr[1];
@@ -233,6 +229,7 @@ function onReady(msg) {
 
 //抢地主逻辑
 function onQiangDizhu(msg) {
+	console.log('onQiangDizhu');
 	let msgBean = msg;
 
 	let playerName = msgBean.playerName;

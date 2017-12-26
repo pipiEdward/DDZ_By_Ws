@@ -30,5 +30,5 @@ cc.Node.prototype.gns = function(...value){
         node = node.gn(value[i]);
     }
     return node;
-}
+};
 

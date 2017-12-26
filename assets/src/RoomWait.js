@@ -35,7 +35,7 @@ cc.Class({
                 case 'joinRoom':
                     this.onJoin(msg);
                     break;
-                case Global.roomIndex+'gameStart':
+                case Global.roomNum+'gameStart':
                     this.onGameStart(msg);
                     break;
                 default:

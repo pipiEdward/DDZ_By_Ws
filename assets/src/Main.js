@@ -45,9 +45,11 @@ cc.Class({
         let data = event.detail;
     },
 
-    netStart (event) {
+    netStart(event) {
         this._super();
         //登录
+
+
     },
 
 
